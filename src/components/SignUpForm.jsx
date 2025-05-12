@@ -14,9 +14,17 @@ const SignUpForm = () => {
 
 const handleSubmit = (e)=>{
   e.preventDefault();
+  // check if the input fields is not empty
+ const fullname = user.fullname.length > 0 
+ const username = user.username.length > 0
+ const password = user.password. length > 0
+
+if(fullname && username && password){
   // save to local storage
   window.localStorage.setItem('userDets', JSON.stringify(user))
   navigate('login')
+}
+ 
 }
 
   const getInput = (e)=>{

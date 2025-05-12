@@ -1,14 +1,34 @@
 import React from 'react'
+import { useState } from 'react'
+import { useNavigate } from 'react-router'
 
 const LoginForm = () => {
+const[user,setUser] = useState({
+  username: '',
+  password: ''
+})
 
+const navigate = useNavigate()
 
-const getInput = (e)=>{
-  const username = e.target
-  console.log(username)
+// getting the user input and saving it to state
+const getInput = (e)=>{ 
+  setUser(prev => ({...prev, [e.target.name]:e.target.value}))
 }
 
+const handleSubmit = (e)=>{
+  e.preventDefault();
+  // get user previous input from local storage
+  const data = window.localStorage.getItem('userDets')  
+  const parsed = data ? JSON.parse(data) : null;
 
+  // check if data in local storage matches input field
+  const username = user.username === parsed.username
+  const password = user.password === parsed.password
+
+  if(username && password){
+    navigate('/home')
+  }
+}
 
 
   return (
@@ -16,7 +36,7 @@ const getInput = (e)=>{
       <h1 className="text-center  text-slate-400 text-[30px] sm:text-4xl font-bold capitalize mb-6">modern task manager</h1>
       <h2 className="mb-4 text-center text-[1rem] sm:text-[20px] font-bold text-blue-500">sign in to your account</h2>
 
-      <form action="" className='flex flex-col w-[100%]
+      <form onSubmit={handleSubmit} className='flex flex-col w-[100%]
          sm:w-[80%] md:w-[70%] lg:w-[60%] gap-2 mx-auto  '>
 
             <div className=" flex flex-col w-[90%]  gap-2 mx-auto  sm:w-[80%] md:w-[77%] py-3 ">
@@ -28,7 +48,7 @@ const getInput = (e)=>{
             <div className="flex flex-col w-[90%]  gap-2 mx-auto  sm:w-[80%] md:w-[77%] py-3">
               <label className="font-medium text-lg" htmlFor="password">Password</label>
               <input className=" outline  px-4 py-2  focus:border-2 focus:border-blue-400 focus:outline-none "
-               type="password" name="password" id="password" placeholder="Enter Password"/>
+               type="password" name="password" id="password" placeholder="Enter Password" onChange={getInput} />
             </div>
             <button className='bg-blue-500 py-2 p-6 text-lg font-semibold text-white rounded-full mx-auto w-fit'>Login</button>
 
