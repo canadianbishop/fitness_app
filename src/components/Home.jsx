@@ -1,12 +1,15 @@
-import React, { useContext, useState } from 'react';
-import { TaskContext } from '../contexts/TaskContext';
-import { AuthContext } from '../contexts/AuthContext';
+import React, { useContext, useState } from "react";
+import { TaskContext } from "../contexts/TaskContext";
+import { AuthContext } from "../contexts/AuthContext";
+import { useNavigate } from "react-router";
 
 const Dashboard = () => {
   const { tasks, addTask, deleteTask } = useContext(TaskContext);
-  const [newTask, setNewTask] = useState('');
+  const [newTask, setNewTask] = useState("");
 
-  const { getUser } = useContext(AuthContext);
+  const navigate = useNavigate();
+
+  const { getUser,logout } = useContext(AuthContext);
 
   const user = getUser();
 
@@ -14,14 +17,26 @@ const Dashboard = () => {
     e.preventDefault();
     if (!newTask.trim()) return;
     addTask({ id: Date.now(), text: newTask });
-    setNewTask('');
+    setNewTask("");
   };
 
+  const onLogout = ()=>{
+    logout();
+    navigate('/', {replace:true})
+  }
   return (
     <div className="bg-black min-h-screen">
-      <div className="container mx-auto py-4 text-gray-400 ">
+      <div className="container mx-auto py-4 text-gray-400">
         <div className="border py-4 px-6 mb-4 text-center">
-          <h1 className="capitalize text-3xl">Hello {user.username}</h1>
+          <div className="flex justify-between">
+            <h1 className="capitalize text-3xl">Hello {user.username}!!</h1>
+            <button
+              onClick={onLogout}
+              className="bg-blue-500 text-white py-2 px-3 rounded-sm capitalize text-sm"
+            >
+              sign out
+            </button>
+          </div>
           <h2>Your Tasks</h2>
         </div>
 
@@ -31,7 +46,7 @@ const Dashboard = () => {
               Add a new task
             </h3>
             <hr className="my-2" />
-            <form onSubmit={handleSubmit} className="flex mt-12 mb-24 ">
+            <form onSubmit={handleSubmit} className=" flex mt-12 mb-24 ">
               <input
                 type="text"
                 value={newTask}
@@ -59,7 +74,11 @@ const Dashboard = () => {
                 tasks.map((task) => (
                   <li key={task.id}>
                     {task.text}
-                    <button type="button" onClick={() => deleteTask(task.id)}>
+                    <button
+                      className=""
+                      type="button"
+                      onClick={() => deleteTask(task.id)}
+                    >
                       Delete
                     </button>
                   </li>

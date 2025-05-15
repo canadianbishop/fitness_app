@@ -6,6 +6,8 @@ export const AuthContext = createContext();
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
 
+     
+
   useEffect(() => {
     const storedUser = getUser();
     if (storedUser) setUser(storedUser);
@@ -15,10 +17,11 @@ export const AuthProvider = ({ children }) => {
     const userData = localStorage.getItem('user');
     return userData ? JSON.parse(userData) : null;
   };
+ 
 
   const login = (userData) => {
     setUser(userData);
-    localStorage.setItem('user', JSON.stringify(userData));
+    window.localStorage.setItem('user', JSON.stringify(userData));
   };
 
   const logout = () => {

@@ -5,10 +5,13 @@ import { AuthContext } from '../contexts/AuthContext';
 import { useContext } from 'react';
 
 const LoginForm = () => {
-  const [user, setUser] = useState({
+  const [userDets, setUserDets] = useState({
     username: '',
     password: '',
   });
+
+  console.log(userDets)
+
 
   const navigate = useNavigate();
 
@@ -16,13 +19,16 @@ const LoginForm = () => {
 
   // getting the user input and saving it to state
   const getInput = (e) => {
-    setUser((prev) => ({ ...prev, [e.target.name]: e.target.value }));
+    setUserDets((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
+   const {username,password} = userDets
 
-    login(user);
+    if(!username.trim() || !password.trim()) return;
+
+    login(userDets);
 
     navigate('/home');
   };
@@ -69,7 +75,7 @@ const LoginForm = () => {
           />
         </div>
         <button
-          type="button"
+          type="submit"
           className="bg-blue-500 py-2 p-6 text-lg font-semibold text-white rounded-full mx-auto w-fit"
         >
           Login
